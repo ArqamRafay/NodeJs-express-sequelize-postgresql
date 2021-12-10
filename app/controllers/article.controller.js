@@ -36,7 +36,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-    console.log("APply article")
+
     const title = req.query.title;
     var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
 
@@ -160,4 +160,17 @@ exports.findAllPublished = (req, res) => {
                     err.message || "Some error occurred while retrieving tutorials."
             });
         });
+};
+
+
+// usage of in line query
+exports.inLineQuery = async (req, res) => {
+    const { Sequelize } = require('sequelize');
+    const customQuery = ` select * from articles where id =3 `
+    let combinationCount = await db.sequelize.query(customQuery, { type: Sequelize.QueryTypes.SELECT, logging: false })
+    if (combinationCount.length)
+        res.status(200).send(combinationCount)
+    else
+        res.status(200).send({ message: "No data gathered" })
+
 };

@@ -6,6 +6,8 @@ module.exports = app => {
     // Create a new Tutorial
     router.post("/", article.create);
   
+    router.get("/inlinequery",article.inLineQuery);
+    
     // Retrieve all Tutorials
     router.get("/", article.findAll);
   
@@ -23,6 +25,8 @@ module.exports = app => {
   
     // Create a new Tutorial
     router.delete("/", article.deleteAll);
+
+
   
     app.use('/api/article', router);
   };
