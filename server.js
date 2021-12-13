@@ -33,6 +33,7 @@ app.use(expressJWT({ secret: secret, algorithms: ['HS256'] }).unless(
     }
 ))
 
+
 function generateAccessToken(userData) {
     return jwt.sign(userData, secret, { expiresIn: '1800s' })   // 1800 (30 minutes)
 }
