@@ -6,6 +6,7 @@ var expressJWT = require("express-jwt")
 const app = express();
 const db = require("./app/models");
 // db.sequelize.sync();
+// db.sequelize.sync({ alter: false });
 db.sequelize.sync().then(() => {
     console.log("All models were synchronized successfully.");
     console.log("Drop and re-sync db.");
@@ -29,6 +30,7 @@ app.use(expressJWT({ secret: secret, algorithms: ['HS256'] }).unless(
         path: [
             '/token/createNewUser',
             '/',
+            '/createCustomeTable'
         ]
     }
 ))
@@ -75,6 +77,27 @@ app.get('/token/userOrders', authenticateToken, (req, res) => {
 // Public route
 app.get("/", (req, res) => {
     return res.json({ message: "Welcome to application." });
+});
+
+app.get("/createCustomeTable", (req, res) => {
+    // type:sequelize.QueryTypes.SELECT
+    let query = `CREATE TABLE userOne (
+        user_id serial PRIMARY KEY,
+        username VARCHAR ( 50 ) UNIQUE NOT NULL,
+        password VARCHAR ( 50 ) NOT NULL,
+        email VARCHAR ( 255 ) UNIQUE NOT NULL,
+        created_on TIMESTAMP NOT NULL,
+            last_login TIMESTAMP 
+    );`
+    // db.sequelize.query('SELECT * FROM articles')
+    db.sequelize.query(query)
+
+        .then(function (dps) {
+            console.log(dps[0])
+            return res.json({ datapoints: dps[0] });
+
+        });
+    // return res.json({ message: "Welcome to custome table area." });
 });
 
 require("./app/routes/tutorial.routes")(app);
